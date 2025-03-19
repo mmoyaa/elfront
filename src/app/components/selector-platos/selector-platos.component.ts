@@ -10,6 +10,7 @@ import { PlatosService, Plato } from '../../services/platos.service';
 export class SelectorPlatosComponent implements OnInit {
   platos: Plato[] = [];
   selectedPlato: Plato | null = null;
+  searchTerm: string = '';
 
   constructor(private platosService: PlatosService) {}
 
@@ -20,6 +21,19 @@ export class SelectorPlatosComponent implements OnInit {
     });
   }
 
+  buscarPlato() {
+    const platoEncontrado = this.platos.find(plato =>
+      plato.nombre.toLowerCase().includes(this.searchTerm.toLowerCase())
+    );
+    
+    if (platoEncontrado) {
+      this.selectedPlato = platoEncontrado;
+    } else {
+      this.selectedPlato = null;
+      alert('No se encontró el plato.');
+    }
+  }
+  
   seleccionarPlato(event: any) {
     const platoId = event.target.value;
     this.selectedPlato = this.platos.find(plato => plato.id == platoId) || null;
