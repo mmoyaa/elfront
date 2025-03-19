@@ -1,3 +1,11 @@
+<!-- <label for="platos">Selecciona un plato:</label>
+<select id="platos" (change)="seleccionarPlato($event)">
+  <option value="" selected disabled>Elige un plato</option>
+  <option *ngFor="let plato of platos" [value]="plato.id">
+    {{ plato.nombre }}
+  </option>
+</select> -->
+
 <label for="platos">Selecciona un plato:</label>
 <select id="platos" (change)="seleccionarPlato($event)">
   <option value="" selected disabled>Elige un plato</option>
@@ -6,23 +14,16 @@
   </option>
 </select>
 
-<div class="row"  *ngIf="selectedPlato">
-    <div class="col-md-4">
-        <label>Ingrediente 1:</label>
-        <input type="text"  class="form-control" [value]="selectedPlato.ingrediente1" readonly />
-    </div>
-    <div class="col-md-4">
-        <label>Ingrediente 2:</label>
-        <input type="text"  class="form-control" [value]="selectedPlato.ingrediente2" readonly />
-    </div>
-    <div class="col-md-4">
-        <label>Ingrediente 3:</label>
-        <input type="text"   class="form-control" [value]="selectedPlato.ingrediente3" readonly />
-    </div>
+<div>
+  <label>Ingrediente 1:</label>
+  <input type="text" [value]="selectedPlato?.ingrediente1" readonly />
+
+  <label>Ingrediente 2:</label>
+  <input type="text" [value]="selectedPlato?.ingrediente2" readonly />
+
+  <label>Ingrediente 3:</label>
+  <input type="text" [value]="selectedPlato?.ingrediente3" readonly />
 </div>
-
-<h1>si</h1>
-
 
 
 <!-- <div *ngIf="selectedPlato">
