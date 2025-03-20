@@ -1,27 +1,90 @@
-# Mantenedor
+export class NatescposComponent implements OnInit {
+  pdfDoc: any; // Referencia al documento PDF
+  currentPage = 1; // Página actual
+  scale = 1.3; // Zoom inicial
+  @ViewChild('pdfCanvas', { static: false }) pdfCanvas!: ElementRef<HTMLCanvasElement>;
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 16.2.16.
+  renderPDF(pdfData: Uint8Array): void {
+    pdfjsLib.getDocument(pdfData).promise.then(pdf => {
+      console.log('PDF cargado');
+      this.pdfDoc = pdf; // Guarda el documento PDF
+      this.renderPage(this.currentPage);
+    }).catch(error => {
+      console.error('Error al cargar el documento PDF: ', error);
+    });
+  }
 
-## Development server
+  renderPage(pageNum: number): void {
+    this.pdfDoc.getPage(pageNum).then(page => {
+      if (this.pdfCanvas && this.pdfCanvas.nativeElement) {
+        const canvas = this.pdfCanvas.nativeElement;
+        const ctx = canvas.getContext('2d');
+        const viewport = page.getViewport({ scale: this.scale });
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The application will automatically reload if you change any of the source files.
+        canvas.width = viewport.width;
+        canvas.height = viewport.height;
 
-## Code scaffolding
+        page.render({ canvasContext: ctx, viewport })
+          .then(() => console.log(`Página ${pageNum} renderizada`))
+          .catch(error => console.error('Error al renderizar la página:', error));
+      }
+    }).catch(error => {
+      console.error('Error al obtener la página del PDF:', error);
+    });
+  }
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+  nextPage(): void {
+    if (this.currentPage < this.pdfDoc.numPages) {
+      this.currentPage++;
+      this.renderPage(this.currentPage);
+    }
+  }
 
-## Build
+  prevPage(): void {
+    if (this.currentPage > 1) {
+      this.currentPage--;
+      this.renderPage(this.currentPage);
+    }
+  }
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory.
+  zoomIn(): void {
+    this.scale += 0.2;
+    this.renderPage(this.currentPage);
+  }
 
-## Running unit tests
+  zoomOut(): void {
+    if (this.scale > 0.5) {
+      this.scale -= 0.2;
+      this.renderPage(this.currentPage);
+    }
+  }
+}
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
 
-## Running end-to-end tests
 
-Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To use this command, you need to first add a package that implements end-to-end testing capabilities.
 
-## Further help
+enhtml
 
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
+<div class="toolbar">
+  <button (click)="prevPage()">⬅ Anterior</button>
+  <span>Página {{ currentPage }} de {{ pdfDoc?.numPages }}</span>
+  <button (click)="nextPage()">Siguiente ➡</button>
+  <button (click)="zoomIn()">🔍➕ Zoom In</button>
+  <button (click)="zoomOut()">🔍➖ Zoom Out</button>
+</div>
+
+<canvas #pdfCanvas></canvas>
+
+
+en css 
+.toolbar {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+button {
+  padding: 5px 10px;
+  cursor: pointer;
+}
