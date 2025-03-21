@@ -83,3 +83,26 @@
   <input type="text"   class="form-control" [value]="selectedPlato.ingrediente3" readonly />
 </div> 
 <!-- ------------------------------despliega la seleccion y los input-------------------------------- -->
+
+
+<!-- <div class="pdf-container">
+  <canvas #pdfCanvas></canvas>
+  <div class="controls">
+    <button (click)="prevPage()" [disabled]="currentPage === 1">Atrás</button>
+    <span> Página {{ currentPage }} de {{ totalPages }} </span>
+    <button (click)="nextPage()" [disabled]="currentPage === totalPages">Siguiente</button>
+    <button (click)="zoomIn()">Zoom +</button>
+    <button (click)="zoomOut()">Zoom -</button>
+  </div>
+</div> -->
+
+<div>
+  <input type="file" (change)="onFileSelected($event)" accept=".pdf" />
+  <canvas #pdfCanvas></canvas>
+  
+  <div *ngIf="totalPages > 0">
+    <button (click)="prevPage()">Anterior</button>
+    <span>Página {{currentPage}} de {{totalPages}}</span>
+    <button (click)="nextPage()">Siguiente</button>
+  </div>
+</div>

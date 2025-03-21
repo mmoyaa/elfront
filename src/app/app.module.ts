@@ -6,6 +6,7 @@ import { AppComponent } from './app.component';
 import { SelectorPlatosComponent } from './components/selector-platos/selector-platos.component';
 import { HttpClientModule } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
+import { PdfViewerModule } from 'ng2-pdf-viewer';
 
 @NgModule({
   declarations: [
@@ -16,7 +17,9 @@ import { FormsModule } from '@angular/forms';
     BrowserModule,
     AppRoutingModule,
     HttpClientModule,
-    FormsModule
+    PdfViewerModule,
+    FormsModule, PdfViewerModule 
+   
   ],
   providers: [],
   bootstrap: [AppComponent]
